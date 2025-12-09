@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0915;
+  --foreground: #f8f7fb;
+  --primary: #8ad6ff;
+  --accent: #ff7a84;
+  --text-muted: rgba(248, 247, 251, 0.65);
+  --border: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  color: var(--foreground);
+  background: linear-gradient(135deg, #141326, #0a0915);
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(17, 16, 30, 0.95);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-lg font-semibold transition-all duration-200;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-[#8ad6ff] to-[#ff7a84] text-white hover:opacity-90;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent border border-white/20 text-white hover:bg-white/10;
+  }
+
+  .pill {
+    @apply px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .pill-neon {
+    @apply bg-gradient-to-r from-[#8ad6ff]/20 to-[#ff7a84]/20 border border-[#8ad6ff]/30 text-[#8ad6ff];
+  }
+
+  .pill-ghost {
+    @apply bg-white/5 border border-white/10 text-white/70;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}

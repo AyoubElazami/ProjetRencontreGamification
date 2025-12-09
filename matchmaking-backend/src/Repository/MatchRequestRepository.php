@@ -42,5 +42,20 @@ class MatchRequestRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Trouve toutes les requêtes en cours (pending) impliquant un utilisateur
+     * @return MatchRequest[]
+     */
+    public function findPendingByUser(User $user): array
+    {
+        return $this->createQueryBuilder('mr')
+            ->where('mr.fromUser = :user OR mr.toUser = :user')
+            ->andWhere('mr.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', MatchRequest::STATUS_PENDING)
+            ->getQuery()
+            ->getResult();
+    }
 }
 

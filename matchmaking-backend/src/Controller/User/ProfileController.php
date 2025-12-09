@@ -117,9 +117,32 @@ class ProfileController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        // Vérifier que la requête contient des fichiers
+        if (!$request->files->has('avatar')) {
+            return $this->json(['error' => 'No file uploaded. Please select a file.'], 400);
+        }
+
         $file = $request->files->get('avatar');
         if (!$file) {
             return $this->json(['error' => 'No file uploaded'], 400);
+        }
+
+        // Vérifier que c'est bien un fichier uploadé
+        if (!$file->isValid()) {
+            return $this->json(['error' => 'Invalid file upload: ' . $file->getErrorMessage()], 400);
+        }
+
+        // Vérifier le type de fichier
+        $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        $mimeType = $file->getMimeType();
+        if (!in_array($mimeType, $allowedMimeTypes)) {
+            return $this->json(['error' => 'Invalid file type. Allowed types: JPEG, PNG, GIF, WebP'], 400);
+        }
+
+        // Vérifier la taille (max 5MB)
+        $maxSize = 5 * 1024 * 1024; // 5MB
+        if ($file->getSize() > $maxSize) {
+            return $this->json(['error' => 'File too large. Maximum size: 5MB'], 400);
         }
 
         try {

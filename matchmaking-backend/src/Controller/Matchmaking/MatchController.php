@@ -134,6 +134,7 @@ class MatchController extends AbstractController
             'id' => $match->getId(),
             'user' => [
                 'id' => $otherUser->getId(),
+                'email' => $otherUser->getEmail(),
                 'username' => $otherUser->getUsername(),
                 'avatarUrl' => $otherUser->getAvatarUrl(),
                 'bio' => $otherUser->getBio()

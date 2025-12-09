@@ -1,5 +1,0 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { liveRooms } from '../assets/mockData';
-export function LiveRooms() {
-    return (_jsxs("section", { className: "glass-card live-rooms", children: [_jsxs("header", { className: "section-header", children: [_jsxs("div", { children: [_jsx("p", { children: "Rooms audio/vid\u00E9o" }), _jsx("h2", { children: "Choisis ton ambiance, rejoins la sc\u00E8ne" })] }), _jsx("span", { className: "pill neon", children: "Mod\u00E9ration IA en temps r\u00E9el" })] }), _jsx("div", { className: "rooms-grid", children: liveRooms.map((room) => (_jsxs("article", { className: "room-card", style: { background: room.gradient }, children: [_jsxs("div", { className: "room-card__head", children: [_jsx("strong", { children: room.title }), _jsx("span", { children: room.latency })] }), _jsx("p", { children: room.mood }), _jsxs("div", { className: "room-card__foot", children: [_jsxs("span", { children: [room.members, " membres"] }), _jsx("span", { children: room.distance })] })] }, room.title))) })] }));
-}

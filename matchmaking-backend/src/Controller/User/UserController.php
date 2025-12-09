@@ -85,6 +85,7 @@ class UserController extends AbstractController
             'level' => $user->getLevel(),
             'xp' => $user->getXp(),
             'score' => $user->getScore(),
+            'tags' => array_map(fn(\App\Entity\ProfileTag $tag) => $tag->getName(), $user->getTags()->toArray()),
             'createdAt' => $user->getCreatedAt()?->format('c')
         ];
     }

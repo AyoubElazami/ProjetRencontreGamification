@@ -41,7 +41,7 @@ class RecommendationService
                ->setParameter('maxAge', $ageRange[1]);
         }
 
-        // Exclure les utilisateurs déjà matchés ou avec requête en cours
+        // Exclure les utilisateurs déjà matchés
         $existingMatches = $this->matchRepo->findUserMatches($user);
         $excludedIds = [$user->getId()];
         foreach ($existingMatches as $match) {
@@ -49,6 +49,17 @@ class RecommendationService
                 ? $match->getUserB() 
                 : $match->getUserA();
             $excludedIds[] = $otherUser->getId();
+        }
+
+        // Exclure les utilisateurs avec des requêtes en cours (pending)
+        $pendingRequests = $this->matchRequestRepo->findPendingByUser($user);
+        foreach ($pendingRequests as $request) {
+            $otherUser = $request->getFromUser()->getId() === $user->getId() 
+                ? $request->getToUser() 
+                : $request->getFromUser();
+            if (!in_array($otherUser->getId(), $excludedIds)) {
+                $excludedIds[] = $otherUser->getId();
+            }
         }
 
         $qb->andWhere('u.id NOT IN (:excluded)')
