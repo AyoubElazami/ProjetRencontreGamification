@@ -86,6 +86,16 @@ export default function ProfilePage() {
     }
   };
 
+  if (!user) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen flex items-center justify-center">
+          <Loader2 size={32} className="animate-spin text-[#8ad6ff]" />
+        </div>
+      </ProtectedRoute>
+    );
+  }
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen p-4 md:p-8 pb-24">
@@ -100,7 +110,7 @@ export default function ProfilePage() {
               <div
                 className="w-32 h-32 rounded-full bg-cover bg-center border-4 border-[#8ad6ff]/30"
                 style={{
-                  backgroundImage: user.avatarUrl
+                  backgroundImage: user?.avatarUrl
                     ? `url(http://localhost:8000${user.avatarUrl})`
                     : `linear-gradient(135deg, rgba(255,107,139,0.5), rgba(90,214,255,0.5))`,
                 }}
@@ -117,12 +127,12 @@ export default function ProfilePage() {
               </label>
             </div>
             <div className="text-center md:text-left">
-              <h2 className="text-2xl font-bold mb-2">{user.username || user.email}</h2>
-              <p className="text-white/60 mb-2">{user.email}</p>
+              <h2 className="text-2xl font-bold mb-2">{user?.username || user?.email}</h2>
+              <p className="text-white/60 mb-2">{user?.email}</p>
               <div className="flex items-center gap-4 text-sm">
-                <span>Niveau {user.level}</span>
-                <span>{user.xp} XP</span>
-                <span>Score {user.score}</span>
+                <span>Niveau {user?.level || 0}</span>
+                <span>{user?.xp || 0} XP</span>
+                <span>Score {user?.score || 0}</span>
               </div>
             </div>
           </div>

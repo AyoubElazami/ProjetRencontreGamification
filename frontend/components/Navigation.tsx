@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Home, MessageCircle, User, Trophy, Heart, Bell } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -53,9 +54,8 @@ export default function Navigation() {
     { icon: User, label: 'Profil', path: '/profile' },
   ];
 
-  const handleNavClick = (path: string, scrollTo?: string) => {
-    router.push(path);
-    if (scrollTo && pathname === '/dashboard') {
+  const handleScrollTo = (scrollTo: string) => {
+    if (pathname === '/dashboard') {
       setTimeout(() => {
         const element = document.querySelector(`.${scrollTo}`);
         if (element) {
@@ -70,10 +70,35 @@ export default function Navigation() {
       <div className="flex items-center justify-around max-w-2xl mx-auto">
         {navItems.map(({ icon: Icon, label, path, scrollTo, badge }, index) => {
           const isActive = pathname === path || (path === '/dashboard' && pathname.startsWith('/dashboard'));
+          
+          // Pour les liens avec scrollTo, utiliser un bouton
+          if (scrollTo) {
+            return (
+              <button
+                key={`${label}-${index}`}
+                onClick={() => handleScrollTo(scrollTo)}
+                className={`relative flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
+                  isActive
+                    ? 'text-[#8ad6ff] bg-[#8ad6ff]/10'
+                    : 'text-white/60 hover:text-white/80 hover:bg-white/5'
+                }`}
+              >
+                <Icon size={20} />
+                <span className="text-xs">{label}</span>
+                {badge && badge > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                    {badge > 9 ? '9+' : badge}
+                  </span>
+                )}
+              </button>
+            );
+          }
+
+          // Pour les liens normaux, utiliser Link pour le préchargement
           return (
-            <button
+            <Link
               key={`${label}-${index}`}
-              onClick={() => handleNavClick(path, scrollTo)}
+              href={path}
               className={`relative flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
                 isActive
                   ? 'text-[#8ad6ff] bg-[#8ad6ff]/10'
@@ -87,7 +112,7 @@ export default function Navigation() {
                   {badge > 9 ? '9+' : badge}
                 </span>
               )}
-            </button>
+            </Link>
           );
         })}
       </div>

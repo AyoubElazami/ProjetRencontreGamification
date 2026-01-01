@@ -132,10 +132,25 @@ class ProfileController extends AbstractController
             return $this->json(['error' => 'Invalid file upload: ' . $file->getErrorMessage()], 400);
         }
 
-        // Vérifier le type de fichier
+        // Vérifier le type de fichier (essayer getMimeType, sinon utiliser l'extension)
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        $mimeType = $file->getMimeType();
-        if (!in_array($mimeType, $allowedMimeTypes)) {
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        
+        $isValid = false;
+        try {
+            $mimeType = $file->getMimeType();
+            if (in_array($mimeType, $allowedMimeTypes)) {
+                $isValid = true;
+            }
+        } catch (\Exception $e) {
+            // Si getMimeType() échoue, vérifier l'extension
+            $extension = strtolower(pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
+            if (in_array($extension, $allowedExtensions)) {
+                $isValid = true;
+            }
+        }
+        
+        if (!$isValid) {
             return $this->json(['error' => 'Invalid file type. Allowed types: JPEG, PNG, GIF, WebP'], 400);
         }
 
@@ -159,7 +174,20 @@ class ProfileController extends AbstractController
                 'avatarUrl' => $avatarUrl
             ]);
         } catch (\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
+            // Logger l'erreur pour le débogage
+            error_log('Avatar upload error: ' . $e->getMessage());
+            error_log('Stack trace: ' . $e->getTraceAsString());
+            
+            // Retourner un message d'erreur clair
+            $errorMessage = $e->getMessage();
+            if (strpos($errorMessage, 'Impossible de créer') !== false || 
+                strpos($errorMessage, 'n\'est pas accessible') !== false) {
+                $errorMessage = 'Erreur de permissions. Vérifiez que le serveur peut écrire dans le dossier uploads.';
+            }
+            
+            return $this->json([
+                'error' => $errorMessage
+            ], 500);
         }
     }
 

@@ -44,9 +44,23 @@ export default function LeaderboardPage() {
         </h1>
 
         {loading ? (
-          <div className="glass-card p-12 text-center">
-            <Loader2 size={32} className="animate-spin mx-auto mb-4 text-[#8ad6ff]" />
-            <p className="text-white/65">Chargement du classement...</p>
+          <div className="glass-card p-6 md:p-8">
+            <div className="space-y-3">
+              {[...Array(5)].map((_, index) => (
+                <div key={index} className="glass-card p-4 flex items-center gap-4 animate-pulse">
+                  <div className="w-12 h-12 bg-white/10 rounded-full"></div>
+                  <div className="w-12 h-12 bg-white/10 rounded-full"></div>
+                  <div className="flex-1">
+                    <div className="h-5 w-32 bg-white/10 rounded mb-2"></div>
+                    <div className="h-4 w-48 bg-white/5 rounded"></div>
+                  </div>
+                  <div className="text-right">
+                    <div className="h-6 w-16 bg-white/10 rounded mb-1"></div>
+                    <div className="h-4 w-12 bg-white/5 rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="glass-card p-6 md:p-8">

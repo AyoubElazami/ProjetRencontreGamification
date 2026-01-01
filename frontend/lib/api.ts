@@ -17,6 +17,12 @@ api.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${token}`;
     }
   }
+  
+  // Si c'est un FormData, supprimer le Content-Type pour qu'Axios le définisse automatiquement avec le boundary
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
+  
   return config;
 });
 
@@ -128,13 +134,8 @@ export const userAPI = {
   uploadAvatar: async (file: File): Promise<{ avatarUrl: string }> => {
     const formData = new FormData();
     formData.append('avatar', file);
-    // Pour FormData, ne pas définir Content-Type - Axios le fera automatiquement avec le boundary
-    const response = await api.post<{ avatarUrl: string }>('/api/me/avatar', formData, {
-      headers: {
-        // Supprimer le Content-Type par défaut pour cette requête
-        'Content-Type': undefined,
-      },
-    });
+    // L'intercepteur supprimera automatiquement le Content-Type pour FormData
+    const response = await api.post<{ avatarUrl: string }>('/api/me/avatar', formData);
     return response.data;
   },
 

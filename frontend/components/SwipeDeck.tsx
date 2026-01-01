@@ -109,12 +109,39 @@ export default function SwipeDeck() {
     return null;
   }
 
+  // Skeleton loader pour les recommandations
   if (loading) {
     return (
-      <section className="glass-card p-8">
-        <div className="text-center">
-          <Loader2 size={32} className="animate-spin mx-auto mb-4 text-[#8ad6ff]" />
-          <p className="text-white/65">Chargement des recommandations...</p>
+      <section className="glass-card p-6 md:p-8">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <p className="text-sm font-semibold text-[#8ad6ff] mb-1">Deck immersif</p>
+            <h2 className="text-2xl font-bold">Swipe scénarisé avec actions exclusives</h2>
+          </div>
+          <div className="pill-neon flex items-center gap-2">
+            <Flame size={16} />
+            <div className="w-8 h-4 bg-white/10 rounded animate-pulse"></div>
+          </div>
+        </div>
+        <div className="relative h-[500px] mb-6">
+          <div className="absolute inset-0 glass-card overflow-hidden animate-pulse">
+            <div className="h-2/3 bg-gradient-to-br from-white/10 to-white/5"></div>
+            <div className="p-6 h-1/3">
+              <div className="h-6 w-32 bg-white/10 rounded mb-2"></div>
+              <div className="h-4 w-full bg-white/5 rounded mb-2"></div>
+              <div className="h-4 w-3/4 bg-white/5 rounded mb-4"></div>
+              <div className="flex gap-2">
+                <div className="h-6 w-16 bg-white/10 rounded-full"></div>
+                <div className="h-6 w-20 bg-white/10 rounded-full"></div>
+                <div className="h-6 w-24 bg-white/10 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center justify-center gap-4">
+          <div className="h-10 w-24 bg-white/10 rounded-lg animate-pulse"></div>
+          <div className="h-10 w-24 bg-white/10 rounded-lg animate-pulse"></div>
+          <div className="h-10 w-28 bg-white/10 rounded-lg animate-pulse"></div>
         </div>
       </section>
     );
